@@ -1,0 +1,51 @@
+* Tips & tricks for challenges: 
+	+ During interview / assessment (VM/physical):
+		- DON'T run `reset` on "terminals" running on your browser. 
+		- See all services + status: 
+			' $ sudo systemctl list-units --type=service --all 
+		- Start multiple services: 
+			' $ sudo systemctl start mysql php-fpm nginx 
+		- Read info on TCP: 
+			' $ man tcp 
+		- Package iproute with ss command not available: 
+			' $ netstat -tulnip 			# Package: net-tools 
+			' $ lsof -i :80 			# Package: lsof 
+
+
+	+ Local prep:
+		-  Install Git Bash in Windows 10: 
+			' cmd (Admin)> $ choco install git 
+		-  Read man pages (manuals), `info`, `apropos`: 
+			' $ choco install wsl 
+			' Then search for Ubuntu from Windows Start Menu. 
+		- See all services + status (container): 
+			' $ service --status-all 
+
+
+* Good to know:
+	+ Linux Networking: 
+		- Check if port is open: 
+			' $ curl localhost:80 
+			' $ wget -O- localhost:80 
+			' $ telnet localhost:80 
+		- `ss`: Socket Statistics. 
+	+ Linux distro:
+		- $ cat /etc/*release* 
+	+ Docker: 
+		- See why container crashed: 
+			' $ docker logs <FIRST LETTERS OF CONTAINER ID> 
+		- Rebuild Compose Project after Dockerfile changes: 
+			' $ docker-compose up -d --build 
+	+ Web: 
+		- PHP version: 
+			' $ php -v 
+		- Find PHP-FPM socket: 
+			' $ ls /var/run/php/ 
+		- Check if PHP is getting parsed: 
+			' $ cat > /var/www/html/index.php 
+				<?php phpinfo(); ?>
+	+ MySQL: 
+		- Default port: 3306. 
+	+ Java / Spring (Boot): 
+		- Maven: 
+			' Build app: $ mvn clean package 
