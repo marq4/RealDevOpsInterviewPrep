@@ -1,0 +1,61 @@
+* Technical execution: 
+	$>
+	+ apt update && apt install -y iproute2 
+	+ ss -tulnip 
+	+ service apache2 stop 
+	+ apt install -y mysql-server php-mysql php-fpm nginx vim 
+	+ cat > /var/www/html/index.php 
+		<?php echo 'Hello LEMP!'; ?> 
+	+ service mysql start 
+	+ service php7.4-fpm start 
+	+ service nginx start 
+	+ vim /etc/nginx/sites-available/default 
+		index.php
+		location ~ \.php$ {
+			include snippets/fastcgi-php.conf;
+			fastcgi_pass unix:/var/run/php/php7.4-fpm.sock;
+		}
+	+ nginx -t 
+	+ service nginx reload 
+	+ Web browser: http://localhost:8080/ 
+
+* Theory: 
+	1.- What does LEMP stand for: 
+		Ans: Linux, (E)Nginx, MySQL, PHP. 
+	2.- Why not LAMP: 
+		Ans: 
+		- Nginx handles concurrent connections way better than Apache 
+	     	   by using an event-driven architecture. 
+	     	- For high-traffic sites it is more efficient and uses less memory. 
+	3.- What does it mean for nginx to be a "reverse proxy": 
+		Ans: 
+		- A reverse proxy sits in front of our backend servers. 
+		- Clients think they're talking directly to server, but actually hitting the proxy. 
+		- This allows us to do: 
+			' Load Balancing. 
+			' SSL termination. 
+			' Caching. 
+			' Hide backend topology. 
+		- Conversely, a regular proxy protects clients (human employees at office). 
+	4.- How do we see what is using a port in Ubuntu: 
+		Ans: $ sudo apt install -y iproute2 && ss -tulnip 
+	5.- What would be different in a physical or VM server: 
+		Ans: 
+		- We'd use sudo instead of logging in as root. 
+		- Manage Apache with systemctl (which shouldn't run on a container):
+			' $ systemctl disable --now apache2 
+	6.- What is FPM: 
+		Ans: FastCGI Process Manager allows Nginx to talk to PHP. 
+	7.- What is TCP: 
+		Ans: 
+		- Transmission Control Protocol: connection-oriented, reliable. 
+		- Guarantees "packet" [segment] delivery with acknowledgements, ordering, & retransmission. 
+		- Used for HTTP, SSH, email. 
+		- OSI, TCP/IP (5) Layer: 4: Transport (TCP + UDP). 
+	8.- What is HTTP:
+		Ans:
+		- HyperText Transfer Protocol: Application layer protocol browsers 
+		   use to request & receive web content. 
+		- Runs on top of TCP (usually ports 80, 443 for HTTPSecure). 
+		- Request-response based: client asks for a resource (like index.html), 
+		   server responds with headers + content. 

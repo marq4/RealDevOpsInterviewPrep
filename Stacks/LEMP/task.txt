@@ -1,0 +1,57 @@
+* Instructions to set up a practice environment (Windows 10, Git Bash): 
+	+ Start Docker Desktop. 
+	+ Verify it's running: 
+		- $ docker version 
+	+ Build and start container:
+		- $ cd LabEnv
+		- $ docker-compose up -d 
+	+ Verify: 
+		- $ docker ps 		# labenv-lab-1 
+		- $ docker images 		# labenv-lab 
+		- $ docker network ls 	# labenv_default 
+	+ Enter the container to work on this Linux challenge:
+		- $ winpty docker-compose exec lab bash 
+		- Verify: 
+			' $ ps aux | grep apache2 			# root /usr/sbin/apache2 
+	+ Go into Practice folder, create a new folder <MonthDayYear> and write notes there. 
+
+
+* Task: 
+	+ Install LEMP stack. 
+	+ Create simple index.php under /var/www/html/ that just says "Hello LEMP!" 
+	+ View this message on your web browser. 
+
+* Env:
+	+ Ubuntu 20.04 server. 
+	+ Apache already running. 
+
+
+
+
+* Theory questions:
+	1.- What does LEMP stand for? 
+	2.- Why not LAMP? 
+	3.- What does it mean for nginx to be a "reverse proxy"? 
+	4.- How do we see what is using a port in Ubuntu? 
+	5.- What would be different in a physical or VM server? 
+	6.- What is FPM? 
+	7.- What is TCP? 
+	8.- What is HTTP? 
+
+
+
+
+
+
+* EXTRA: to ALSO practice Docker, create the Dockerfile and compose YAML from scatch for this Linux exercise. 
+
+
+
+* Cleanup after: 
+	+ $ docker-compose down -v --rmi local 
+	+ Verify: 
+		- $ docker images 
+		- $ docker ps -a 
+		- $ docker volume ls 
+	+ Stop Docker Desktop. 
+

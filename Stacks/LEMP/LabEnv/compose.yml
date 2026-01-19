@@ -1,0 +1,10 @@
+---
+services:
+  lab:
+    build: .
+    ports:
+      # Host:Container:
+      - "8080:80"
+    stdin_open: true
+    tty: true
+
