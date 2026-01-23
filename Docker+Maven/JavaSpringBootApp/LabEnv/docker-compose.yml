@@ -1,0 +1,15 @@
+---
+services:
+  lab:
+    build: .
+    # Required for Docker-in-Docker:
+    privileged: true
+    volumes:
+      # Share host Docker socket:
+      - /var/run/docker.sock:/var/run/docker.sock
+      # Bind mounts to share code with Windows host:
+      - ./SpringBootChallengeCode/AppSrc:/workspace/app
+      - ./SpringBootChallengeCode/PracticeCode:/workspace/practice
+    stdin_open: true
+    tty: true
+

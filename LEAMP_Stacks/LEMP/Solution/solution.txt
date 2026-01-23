@@ -17,7 +17,7 @@
 		}
 	+ nginx -t 
 	+ service nginx reload 
-	+ Web browser: http://localhost:8080/ 
+	+ # Web browser: http://localhost:8080/ 
 
 * Theory: 
 	1.- What does LEMP stand for: 
@@ -43,12 +43,12 @@
 		Ans: 
 		- We'd use sudo instead of logging in as root. 
 		- Manage Apache with systemctl (which shouldn't run on a container):
-			' $ systemctl disable --now apache2 
+			' $ sudo systemctl disable --now apache2 
 	6.- What is FPM: 
 		Ans: FastCGI Process Manager allows Nginx to talk to PHP. 
 	7.- What is TCP: 
 		Ans: 
-		- Transmission Control Protocol: connection-oriented, reliable. 
+		- Transmission Control Protocol: stateful, reliable. 
 		- Guarantees "packet" [segment] delivery with acknowledgements, ordering, & retransmission. 
 		- Used for HTTP, SSH, email. 
 		- OSI, TCP/IP (5) Layer: 4: Transport (TCP + UDP). 

@@ -7,35 +7,37 @@
 			' $ sudo systemctl start mysql php-fpm nginx 
 		- Read info on TCP: 
 			' $ man tcp 
-		- Package iproute with ss command not available: 
+		- Package "iproute2" with `ss` command not available: 
 			' $ netstat -tulnip 			# Package: net-tools 
 			' $ lsof -i :80 			# Package: lsof 
 
 
-	+ Local prep:
-		-  Install Git Bash in Windows 10: 
+	+ Local setup (Windows 10): 
+		-  Install Git Bash: 
 			' cmd (Admin)> $ choco install git 
 		-  Read man pages (manuals), `info`, `apropos`: 
 			' $ choco install wsl 
 			' Then search for Ubuntu from Windows Start Menu. 
-		- See all services + status (container): 
-			' $ service --status-all 
+
 
 
 * Good to know:
 	+ Linux Networking: 
 		- Check if port is open: 
-			' $ curl localhost:80 
-			' $ wget -O- localhost:80 
-			' $ telnet localhost:80 
-		- `ss`: Socket Statistics. 
+			' $ curl localhost:8080 
+			' $ wget localhost:8080 
+			' $ telnet localhost:8080 
+			' $ ss -tulnip		# Socket Statistics, TCP, UDP, Listening, Numeric (http->80), Info, Ports. 
 	+ Linux distro:
 		- $ cat /etc/*release* 
 	+ Docker: 
 		- See why container crashed: 
 			' $ docker logs <FIRST LETTERS OF CONTAINER ID> 
 		- Rebuild Compose Project after Dockerfile changes: 
-			' $ docker-compose up -d --build 
+			' $ docker compose up -d --build 
+		- Inside a container: 
+			' See all services + status (no systemd/systemctl): 
+				; $ service --status-all 
 	+ Web: 
 		- PHP version: 
 			' $ php -v 
@@ -44,8 +46,28 @@
 		- Check if PHP is getting parsed: 
 			' $ cat > /var/www/html/index.php 
 				<?php phpinfo(); ?>
+
 	+ MySQL: 
 		- Default port: 3306. 
+
+	+ PostgreSQL: 
+		- Default port: 5432. 
+
 	+ Java / Spring (Boot): 
+		- Base image for Docker: "openjdk:11-jre-slim". 
 		- Maven: 
-			' Build app: $ mvn clean package 
+			' Build app: 
+				; $ mvn clean package 
+			' If test(s) fail and you only want to build the JAR artifact: 
+				; $ mvn clean package --define skipTests 
+
+
+* Mini interview cheat sheet for most common questions: 
+	+ Git: 
+		- What does rebase do ?
+			Ans: 
+			' Moves commits to a new base commit by replaying them, 
+			  creating a linear history with new hashes. 
+			' It should only be used on local or private branches. 
+			' Golden rule: never rebase commits that have already been pushed 
+			  to a shared branch. 

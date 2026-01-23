@@ -1,0 +1,126 @@
+* Execution: 
+	$> 
+	+ cd /workspace/app/ 
+	+ # Try to build app:
+		- mvn clean package 
+		   # Test fails because DB is not available: Caused by: java.lang.RuntimeException: Driver org.postgresql.Driver claims to not accept jdbcUrl, jdbc:h2:mem:testdb 
+	+ # Skip test to build artifact: 
+		- mvn clean package -DskipTests 	# Easier to remember: --define skipTests 
+	+ cd .. 
+	+ cd practice/ 
+	+ mkdir <DATE>/ && cd <DATE>/ 
+	+ mkdir Basic/ ; mkdir Advanced/ 
+	# Basic approach: 
+	+ cd Basic/ 
+	+ cp ../../../app/target/*.jar . 
+	+ # Write Dockerfile + minimal docker-compose.yml 
+	+ docker compose up 
+	+ docker compose ps -a 
+	+ docker logs basic-db-1 
+	   # Error: Database is uninitialized and superuser password is not specified.
+	   # You must specify POSTGRES_PASSWORD to a non-empty value for the superuser. 
+	+ Update YAML. You must know that by default PostgreSQL uses postgres for user and DB name, 
+	    so it would fail (silently) again with only password. 
+	    See user name and DB name we need in app/src/main/resources/application.properties. 
+	    You can now infer the other 2 env var names from the error: 
+		- POSTGRES_DB. 
+		- POSTGRES_USER. 
+	+ docker compose ps 
+	    # basic-app-1, basic-db-1 
+	+ # Web browser: http://localhost:8080/api/products/health: Warehouse API is running! 
+	+ docker compose down 
+	# Advanced approach: 
+	+ cd .. 
+	+ cp Basic/docker-compose.yml Advanced/ 
+	+ cd /workspace && cp -r app/pom.xml src/ practice/<DATE>/Advanced/ 
+	+ cd practice/Advanced/ 
+	# Write multi-stage build Dockerfile. 
+	+ docker compose up 
+	+ # Web browser: http://localhost:8080/api/products/health: Warehouse API is running! 
+
+
+* Answers: 
+	1.- $ java -jar artifact.jar 
+
+	2.- $ mvn clean package 
+
+	3.- $ mvn clean package -DskipTests 
+
+	4.- <APP_ROOT (pom.xml)>/target/ 
+
+	5.- Create .dockerignore file with this content: 
+		*.txt 
+		target/
+
+	6.- | 
+		+ Bind Mount: 
+			- Map host directory to container (shared). 
+			- Syntax: ./host_dir:/container_dir/ 
+			- Allows us to work on files in VS Code (instead of container's vim). 
+		+ Named Volume: 
+			- Managed by Docker. 
+			- Syntax: volume-name:/var/lib/postgresql/data/ 
+			- Survives container deletion. 
+			- Host location (Debian): /var/lib/docker/volumes/ 
+
+	7.- | 
+		+ $ docker compose logs -f 
+		+ Or just do `up` without `--detach` to see all logs. 
+
+	8.- | 
+		+ ENTRYPOINT: 
+			- Main command that always runs. 
+			- Use when command should always be the same. 
+			- Harder to override (with --entrypoint). 
+		+ CMD: 
+			- Default arguments or fallback command. 
+			- Override by simply adding args to `docker run`. 
+			- Use for flexibility. 
+		+ Best practice: BOTH. Example: 
+			ENTRYPOINT ["java", "-jar"]
+			CMD ["app.jar"]
+			# $ docker run app 			-> java -jar app.jar 
+			# $ docker run app another.jar 	-> java -jar another.jar 
+
+	9.- | 
+		+ FROM maven 			# WILL break PROD (but easy to remember). 
+		+ FROM eclipse-temurin:11-jre 	# VS Code will auto-complete, just remember "eclipse" and "jre". 
+
+	10.- | 
+		# Must know: 
+		+ Ubuntu Docker container: /var/lib/postgresql/data/ 
+		+ Alpine Docker container: /var/lib/postgresql/data/ 
+		+ Ubuntu VM/physical: /var/lib/postgresql/<version>/main/ 
+		# Extra: 
+		+ CentOS/RHEL: /var/lib/pgsql/data/ 
+		+ Windows: C:\Program Files\PostgreSQL\<version>\data\ 
+
+	11.- | 
+		+ postgres. 
+		+ postgres. 
+		+ Trick question: PostgreSQL doesn't have a default password - 
+		    it requires POSTGRES_PASSWORD or the container won't start. 
+
+	12.- | 
+		+ Multi-Stage Build is best practice for PROD as it guarantees reproducibility, 
+		+ Whereas simple approach can lead to "works on my machine" issues.
+		+ What matters the most though is that the final PROD image does not contain build tools 
+		    like Maven, only runtime dependencies. 
+
+	13.- Only fetch relevant branch, shallow clone (latest commit only): 
+		+ $ git clone --branch system --single-branch --depth 1 <URL.git> 
+
+	14.- $ docker stats 
+ 
+	15.- | 
+		+ A Build automation and dependency management tool for Java projects. 
+		+ Lifecycle: clean, compile, test, package, install, deploy. 
+
+	16.- Project Object Model is the key file that: 
+		+ Lists dependencies. 
+		+ Defines Build configuration. 
+		+ Specifies Java version, plugins. 
+
+	17.- | 
+		+ Backup: docker exec postgres-container pg_dump -U user <DB_NAME> > backup.sql 
+		+ Restore: docker exec -i new-postgres-container psql -U user <DB_NAME> < backup.sql 

@@ -1,0 +1,24 @@
+_ Other DB _
+
+* PostgreSQL: 
+	+ Install: 
+		- $ sudo apt install -y postgresql 
+	+ Service: 
+		- $ sudo systemctl start postgresql 
+	+ Port: 5432. 
+	+ Confirm: 
+		- $ psql --version 
+
+* MariaDB: mariadb-server. 
+
+
+
+_ Other distro _
+
+* CentOS/RHEL: 
+	+ Package manager: `dnf`. 
+
+* Alpine: 
+	+ Package manager: `apk`. 
+	+ Service: 
+		- $ rc-service nginx start 

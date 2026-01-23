@@ -1,0 +1,17 @@
+---
+services:
+  app:
+    build: .
+    ports:
+      # Host:Container:
+      - "8080:8080"
+    depends_on:
+      - db
+  db:
+    image: postgres:16
+    volumes:
+      - db_data:/var/lib/postgresql/data/
+    # Note: will fail!!! Environment variable missing.
+
+volumes:
+  db_data:

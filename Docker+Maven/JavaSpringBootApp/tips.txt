@@ -1,0 +1,17 @@
+* Tips: 
+	+ CAUTION: If you delete a file in the container under 
+		- /workspace/app, 
+		- /workspace/practice, 
+	    it is also gone in your host (Windows)! 
+	+ Don't try to COPY the jar into the container from ../../ (Dockerfile), simply copy it over to practice folder. 
+	+ You don't need to know the default port number that PostgreSQL uses, Docker will select it by default. 
+	+ For the app to run correctly, 3 env vars are needed. Look into the properties file for hints 
+	   (and to get the values obviously). 
+	+ Either curl from Git Bash or just access the URL from your web browser, NOT from the inner container. 
+	+ If you see: 
+		Whitelabel Error Page, 404 
+	   - Verify the URL (you may be trying http://localhost:8080), but it has to be:
+		http://localhost:8080/api/products/health 
+	+ If you examine the lab's Compose YAML you'll notice that both AppSrc/ and PracticeCode/ folders 
+	   have been mounted into the container. These are Bind Mounts and it means that any files there can be 
+	   edited with VS Code in Windows. 

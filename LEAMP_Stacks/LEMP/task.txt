@@ -1,16 +1,16 @@
 * Instructions to set up a practice environment (Windows 10, Git Bash): 
 	+ Start Docker Desktop. 
 	+ Verify it's running: 
-		- $ docker version 
+		- $ docker --version 
 	+ Build and start container:
 		- $ cd LabEnv
-		- $ docker-compose up -d 
+		- $ docker compose up -d 
 	+ Verify: 
 		- $ docker ps 		# labenv-lab-1 
 		- $ docker images 		# labenv-lab 
 		- $ docker network ls 	# labenv_default 
 	+ Enter the container to work on this Linux challenge:
-		- $ winpty docker-compose exec lab bash 
+		- $ winpty docker compose exec lab bash 
 		- Verify: 
 			' $ ps aux | grep apache2 			# root /usr/sbin/apache2 
 	+ Go into Practice folder, create a new folder <MonthDayYear> and write notes there. 
@@ -47,9 +47,9 @@
 
 
 
-* Cleanup after: 
-	+ $ docker-compose down -v --rmi local 
-	+ Verify: 
+* Cleanup: 
+	+ $ docker compose down -v --rmi local 
+	+ Verify (should be empty): 
 		- $ docker images 
 		- $ docker ps -a 
 		- $ docker volume ls 

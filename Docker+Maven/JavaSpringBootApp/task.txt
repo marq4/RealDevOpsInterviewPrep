@@ -1,0 +1,104 @@
+* Instructions to set up a practice environment: 
+	+ Start Docker Desktop. 
+	+ Launch Project and connect to container: 				# Takes ~10m (first time). 
+		- $ cd LabEnv/ 
+		- $ docker compose up -d 
+		- $ winpty docker compose exec lab bash 
+		# Verify: 
+		- $ java -version 
+		- $ mvn -version 
+		- $ docker --version 
+		- $ docker compose version 
+	+ Write your practice notes under a new folder <DATE> inside PracticeNotes/. 
+	+ Write your practice Docker files inside the lab container under /workspace/practice/<DATE>. 
+
+
+* Task: 
+	+ Containerize given Spring Boot application by writing: 
+		- Dockerfile: (build &) run app. 
+		- Docker Compose: orchestrate: app + DB. 
+
+* Approaches: 
+	+ Basic: build jar outside Docker, container only runs app. 
+	+ Advanced: multi-stage build. 
+
+
+* Specifications: 
+	+ Application port: 8080. 
+	+ Java version: 11. 
+	+ PostgreSQL version: 16. 
+
+
+* Validate exercise completion: 
+	+ Health endpoint: http://localhost:8080/api/products/health 
+	    should return/show success message. 
+
+
+
+
+* Theory questions: 
+	# What you NEED to know: 
+
+	1.- How is a JAR executed/run? 
+
+	2.- How is a Java Spring Boot application built with Maven?
+
+	3.- If tests fail, for example if the DB is not available, how are tests bypassed (to just build the artifact(s))? 
+
+	4.- Where are resulting artifacts placed when build completes?
+
+	5.- How would you exclude all text files and the target folder from being copied during 
+	     Docker build without modifying the Dockerfile? 
+
+	6.- In Docker, what are: 
+		+ Bind mounts? 
+		+ Named volumes? 
+
+	7.- How do we see what Docker Compose is doing in real-time? 
+
+	8.- What's the difference between ENTRYPOINT and CMD in a Dockerfile? 
+	       When would you use each?
+
+	9.- For a Docker base image for a Java/Spring project, what are: 
+		+ One that's easy to remember? 
+		+ The recommended one?
+	    # Base images "java", "openjdk" are deprecated. 
+
+	10.- Where does PostgreSQL store its data by default? 
+
+	11.- What are the default values PostgreSQL uses for: 
+		+ DB name. 
+		+ Superuser. 
+		+ Password. 
+
+	12.- What can you say about building the JAR outside Docker, then just execute it as a container, 
+	       VS multi-stage Build with Docker?
+
+	# Nice to know (extra): 
+
+	13.- What would you do if: 
+		+ You were given the URL for the repo. 
+		+ You were tasked with working on "system" branch only. 
+		+ You were told that the repo is HUGE and downloading it all would simply take TOO LONG. 
+
+	14.- How do we monitor Docker's resource usage in real-time? 
+
+	15.- What is Maven? 
+
+	16.- What is POM? 
+
+	17.- How would you back up a named volume that a running postgres container is using? 
+
+
+
+* Cleanup: 
+	+ Inner Docker resources must be deleted inside Docker-On-Docker: 
+		- $ pwd 
+		  # /workspace/practice/... 
+		- $ docker compose down -v --rmi all 
+	+ And then the outer lab environment on Windows Git Bash: 
+		- $ docker compose down -v --rmi local 
+		- $ rm -rf SpringBootChallengeCode/AppSrc/target/ 
+		- $ rm -rf SpringBootChallengeCode/PracticeCode/<DATE>/Advanced/src/ 
+		- $ rm -rf SpringBootChallengeCode/PracticeCode/<DATE>/Advanced/pom.xml 
+		- $ rm -rf SpringBootChallengeCode/PracticeCode/<DATE>/Basic/*.jar 

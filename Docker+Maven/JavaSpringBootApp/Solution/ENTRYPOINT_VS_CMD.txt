@@ -1,0 +1,149 @@
+=== Dockerfile ENTRYPOINT vs CMD extra quiz ===
+
+* ENTRYPOINT, CMD, or both? 
+	1.- Execute a Spring Boot JAR. 
+	2.- Execute a JAR, flexible name. 
+	3.- Apache + keep alive. 
+	4.- Nginx in PROD. 
+	5.- Sleep with default duration. 
+	6.- Maven Build. 
+	7.- Python script with args. 
+	8.- PostgreSQL. 
+	9.- Compute value (mandatory input). 
+	10.- Utility tool (like curl). 
+	11.- Shell script with options. 
+	12.- Backup script (runs once). 
+	13.- Redis. 
+
+
+
+
+
+
+
+
+* Tip: Do you want the main command to be fixed?
+	+ Yes -> ENTRYPOINT, 
+		- Provide default arguments that can be overridden?
+			' Yes -> Both. 
+	+ No -> CMD. 
+
+
+
+
+
+
+
+
+
+* Solution: 
+#		+ Answer. 
+#		+ Example Dockerfile.
+#		+ Example usage.  
+#		+ Explanation. 
+
+	1.- Execute a Spring Boot JAR: 
+		+ ENTRYPOINT. 
+		+ ENTRYPOINT ["java", "-jar", "app.jar"] 
+		+ $ docker run myapp 
+		+ Command never changes. 
+
+	2.- Execute a JAR, flexible name: 
+		+ Both. 
+		+ | 
+			ENTRYPOINT ["java", "-jar"] 
+			CMD ["app.jar"] 
+		+ | 
+			- $ docker run myapp 
+			- $ docker run myapp other.jar 
+		+ Main command fixed, JAR name can change. 
+
+	3.- Apache + keep alive: 
+		+ CMD (shell form). 
+		+ CMD apachectl start && tail -f /dev/null 
+		+ $ docker run web-server 
+		+ Simple, no override needed. 
+
+	4.- Nginx in PROD: 
+		+ ENTRYPOINT. 
+		+ ENTRYPOINT ["nginx", "-g", "daemon off;"] 
+		+ docker run nginx 
+		+ Standard service, command never changes. 
+
+	5.- Sleep with default duration: 
+		+ Both. 
+		+ | 
+			ENTRYPOINT ["sleep"] 
+			CMD ["60"] 
+		+ | 
+			- $ docker run myapp # sleeps 60s. 
+			- $ docker run myapp 300 
+		+ Easy to override duration. 
+
+	6.- Maven Build: 
+		+ Both. 
+		+ | 
+			ENTRYPOINT ["mvn"] 
+			CMD ["clean", "package"] 
+		+ | 
+			- $ docker run maven-builder 
+			- $ docker run maven-builder test 
+		+ We can easily change Maven goals. 
+
+	7.- Python script with args: 
+		+ Both. 
+		+ | 
+			ENTRYPOINT ["python", "app.py"] 
+			CMD ["--help"] 
+		+ | 
+			- $ docker run pyapp # Usage: ... 
+			- $ docker run pyapp --run 
+		+ Default: usage (easy to override). 
+
+	8.- PostgreSQL: 
+		+ Both. 
+		+ | 
+			ENTRYPOINT ["docker-entrypoint.sh"] 
+			CMD ["postgres"] 
+		+ $ docker run postgres 
+		+ Complex startup script + configurable command. 
+
+	9.- Compute value (mandatory input): 
+		+ ENTRYPOINT. 
+		+ ENTRYPOINT ["./calculate.sh"] 
+		+ $ docker run calc 5 10 
+		+ Input required, no defaults make sense. 
+
+	10.- Utility tool (like curl): 
+		+ ENTRYPOINT. 
+		+ ENTRYPOINT ["curl"] 
+		+ $ docker run my-curl https://api.example.com 
+		+ Container acts like the binary itself. 
+
+	11.- Shell script with options: 
+		+ Both. 
+		+ | 
+			ENTRYPOINT ["/app/script.sh"] 
+			CMD ["--default"] 
+		+ | 
+			- $ docker run myapp 
+			- $ docker run myapp --verbose 
+		+ Has sensible defaults, allows overrides. 
+
+	12.- Backup script (runs once): 
+		+ CMD. 
+		+ CMD ["./backup.sh"] 
+		+ | 
+			- $ docker run backup 
+			- $ docker run backup bash 	# Opens shell. 
+		+ Might want to debug, override entire command. 
+
+	13.- Redis: 
+		+ Both. 
+		+ | 
+			ENTRYPOINT ["redis-server"] 
+			CMD ["--appendonly", "yes"] 
+		+ | 
+			- $ docker run redis 
+			- $ docker run redis --port 6380 
+		+ Default config easy to override. 
