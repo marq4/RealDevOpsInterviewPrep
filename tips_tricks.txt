@@ -69,5 +69,4 @@
 			' Moves commits to a new base commit by replaying them, 
 			  creating a linear history with new hashes. 
 			' It should only be used on local or private branches. 
-			' Golden rule: never rebase commits that have already been pushed 
-			  to a shared branch. 
+			' Golden rule: never rebase commits that have already been pushed to a shared branch. 

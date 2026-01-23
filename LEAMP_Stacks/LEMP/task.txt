@@ -49,7 +49,7 @@
 
 * Cleanup: 
 	+ $ docker compose down -v --rmi local 
-	+ Verify (should be empty): 
+	+ Verify: 
 		- $ docker images 
 		- $ docker ps -a 
 		- $ docker volume ls 

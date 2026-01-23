@@ -1,8 +1,0 @@
-12.- >
-	+ Multi-Stage Build is best for PROD as it guarantees reproducibility. 
-	+ Simple approach can lead to "works on my machine" issues. 
-	+ What matters the most: final PROD image does not contain Maven. 
-
-17.- > 
-	+ Backup: docker exec db pg_dump -U admin db_prod > prod_db_backup.sql 
-	+ Restore: docker exec -i recovered-db psql -U admin db_prod < prod_db_backup.sql 

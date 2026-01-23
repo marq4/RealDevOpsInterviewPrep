@@ -1,4 +1,4 @@
-* Technical execution: 
+* Execution: 
 	$>
 	+ apt update && apt install -y iproute2 
 	+ ss -tulnip 
@@ -19,7 +19,8 @@
 	+ service nginx reload 
 	+ # Web browser: http://localhost:8080/ 
 
-* Theory: 
+
+* Answers: 
 	1.- What does LEMP stand for: 
 		Ans: Linux, (E)Nginx, MySQL, PHP. 
 	2.- Why not LAMP: 
