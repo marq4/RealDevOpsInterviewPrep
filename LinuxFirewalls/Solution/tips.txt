@@ -1,0 +1,22 @@
+* Tips: 
+	+ Package managers in Linux: 
+		- `dnf` 			# Red Hat. 
+		- `apt` 			# Debian. 
+		- `zypper`			# SUSE. 
+		- `pacman`		# Arch. 
+		- `apk`			# Alpine. 
+	+ Get info on FW: 
+		- $ curl "https://cheat.sh/firewall" 
+			# firewall-cmd 
+		- $ curl "https://cheat.sh/firewall-cmd" 
+			# The firewalld command-line client. 
+
+	+ Amazon Linux: 
+		- $ dnf search firewall 
+			# firewalld: A firewall daemon with D-Bus interface 
+
+	+ Ubuntu: 
+		- $ apt search firewall 
+			# ufw... program for managing a Netfilter firewall 
+		- Easier to remember: UFW: "Ubuntu FireWall". 
+		- $ curl "https://cheat.sh/ufw" 

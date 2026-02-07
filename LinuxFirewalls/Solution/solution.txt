@@ -1,0 +1,85 @@
+* Execution: 
+	+ Amazon Linux: 
+		- Log into the AWS Console. 
+		- Launch EC2 instance. 
+		- SSH (ec2-user) or EC2 Instance Connect. 
+		- $ which firewalld 
+			# no firewalld 
+		- $ sudo dnf install -y firewalld 
+		- $ sudo systemctl start firewalld 
+		- $ sudo firewall-cmd --list-all 
+		# Incoming 8080/tcp+udp blocked by default. 
+		- Explicitly block it: 
+			' $ sudo firewall-cmd --permanent --add-rich-rule='rule family="ipv4" port port="8080" protocol="tcp" drop' 
+			' $ sudo firewall-cmd --permanent --add-rich-rule='rule family="ipv4" port port="8080" protocol="udp" drop' 
+		- Allow 443: 
+			' $ sudo firewall-cmd --permanent --add-service=https 
+			' $ sudo firewall-cmd --reload
+			' $ sudo firewall-cmd --list-all 
+
+	+ Ubuntu (WSL: Windows Subsystem for Linux): 
+		- Execute ubuntu.exe. 
+		- $ which ufw 
+			# (Nothing.) 
+		- $ sudo apt install -y ufw 
+		- $ sudo ufw enable 
+		- List rules: 
+			' $ sudo ufw status 
+		- Deny: 
+			' $ sudo ufw deny 8080 
+			' $ sudo ufw deny 8080/udp 
+		- Allow: 
+			' $ sudo ufw allow https 
+			' $ sudo ufw status 
+
+
+* Answers: 
+	1.- Why do these distros use different tools? 
+	     Ans: | 
+		+ Due to historical reasons & different philosophies. 
+		+ UFW was specifically built for Ubuntu for simplicity. 
+		+ Firewalld: enterprise-grade, dynamic, zone-aware. 
+
+	2.- What happens if one is already installed and you try to install the other? 
+	     Ans: | 
+		+ Ubuntu: 
+			- UFW is the default, user-friendly, lightweight FW mgmt tool. 
+			- Firewalld is more complex but STILL compatible. 
+			- Using both would cause conflict and unexpected behavior. 
+		+ Amazon Linux 2023 doesn't support EPEL, so UFW cannot be (easily) installed. 
+
+	3.- What FW would you install & configure for use in a Red Hat Enterprise Linux Docker container? 
+	     Ans: | 
+		+ Trick question - containers don't need a firewall. 
+		+ Netw security is handled by the host's FW and Docker's netw isolation. 
+
+	4.- In this challenge we focus on the 2 most relevant protocols primarily used by FWs. 
+	     Suppose a developer codes a server that binds to both protocols, but the 
+	     SysAdmin only blocks one, could that be a security issue? 
+	     Ans: Yes. 
+		+ If developer writes a server that binds to both TCP and UDP, 
+		+ But FW is set to only block TCP, 
+			# sudo ufw deny 9999/tcp 
+		+ A security gap is created:  
+			$ netcat -u server-name 9999 	# Still works! 
+		+ Real-world example: DNS (port 53, both protos). 
+			An attacker could exfiltrate data via DNS tunneling. 
+
+	5.- What happens to the rules if you uninstall the FW? 
+	     Ans: | 
+		+ The underlying iptables rules remain active. 
+		+ FW Linux stack: 
+			1.- User-friendly tools (wrappers): UFW, Firewalld. 
+			2.- CLIs: iptables, nftables. 
+			3.- Netfilter: Linux kernel FW framework; actual packet filtering. 
+
+	6.- The FIRST thing we do as quickly as possible after launching an EC2 instance is 
+	     configure the FW via EC2 Instance Connect to prevent security breaches? 
+	     Ans: False. 
+		+ The FIRST thing we actually do is ensure SGs are correctly configured 
+		    BEFORE launch. Host FWs can come later for defense-in-depth. 
+		+ In AWS, Security Groups are stateful and handle most cases well. 
+		+ We may add Firewalld for: 
+			- Compliance. 
+			- Interface-specific rules. 
+			- Outbound filtering. 

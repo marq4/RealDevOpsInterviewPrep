@@ -1,0 +1,40 @@
+* Tasks: 
+	+ Configure a Firewall (install if necessary) to: 
+		- Block incoming port 8080. 
+		- Allow 443. 
+	+ For one of these (or both): 
+		- An EC2 Amazon Linux 2023. 
+		- A local Ubuntu VM (or WSL). 
+
+
+
+* Notes: 
+	+ DO NOT commit your SSH key to GitHub! 
+	+ Do not attempt to test. Simply create and list the rules. 
+
+
+
+
+* Theory questions: 
+	1.- Why do these distros use different tools? 
+	2.- What happens if one is already installed and you try to install the other? 
+	3.- What FW would you install & configure for use in a RHEL Docker container? 
+	4.- In this challenge we focus on the 2 most relevant protocols primarily used by FWs. 
+	     Suppose a developer codes a server that binds to both protocols, but the 
+	     SysAdmin only blocks one, could that be a security issue? 
+	5.- What happens to the rules if you uninstall the FW? 
+	6.- True of false: the FIRST thing you do as quickly as possible after launching an EC2 instance is 
+	     configure the FW via EC2 Instance Connect to prevent security breaches? 
+
+
+
+
+
+* Cleanup: 
+	+ VM: 
+		- Delete Ubuntu ISO. 
+		- Terminate VM, delete all files. 
+		- Uninstall Virtual Box. 
+	+ EC2: 
+		- Terminate instance. 		# Even "free tier" WILL cost money if left running. 
+		- Delete SSH key pair. 
