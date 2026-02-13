@@ -1,0 +1,115 @@
+* Tips: 
+	+ $ man systemd.service 
+		# /example 
+
+
+
+
+
+
+
+
+
+
+* Execution: 
+	+ List all running services: 
+		- $ systemctl list-units --type service --state running 
+	+ Quickly see if app is already running: 
+		- $ systemctl | grep running | grep fake 
+	+ Check if it was previously running: 
+		- $ systemctl list-units --type service | grep fake 
+		- $ journalctl --lines 500 | grep fake 
+	+ $ which python3 
+	+ $ python3 --version 
+	+ Configure `python` to point to `python3` (persisten, all users including root): 
+		- $ sudo ln --symbolic /usr/bin/python3 /usr/local/bin/python 	# symlink better than alias 
+	+ $ sudo mkdir -p /opt/fake_app/ 
+	+ $ sudo mkdir -p /var/log/fake_app/ 
+	+ $ sudo mv fake_app.py /opt/fake_app/ 
+	+ Manually execute to verify: 
+		- $ python /opt/fake_app/fake_app.py & 
+		- $ tail -f /var/log/fake_app/fake_app.log 
+		- $ sudo pkill --full fake_app.py 
+		- $ echo "" | cat > /var/log/fake_app/fake_app.log 
+	+ Create the service configuration file: 
+		- /etc/systemd/system/fake_app.service 
+		# Unit/after needed or app would crash continously during boot until network is up. 
+		# Service/type simple is the default (not needed). 
+		# Default user = root. Never run services as root (definetively needed). 
+		# WorkingDirectory: good practice (in case script uses relative paths). 
+		# Std in/err: $ grep log /opt/fake_app/fake_app.py 
+		- $ systemd-analyze verify /etc/systemd/system/fake_app.service 
+	+ Set permissions: 
+		- $ sudo chown -R user:user /opt/fake_app/ 
+		- $ sudo chown -R user:user /var/log/fake_app/ 
+		- $ sudo chmod +x /opt/fake_app/fake_app.py 
+	+ Enable & start service: 
+		- $ sudo systemctl daemon-reload 
+		- $ sudo systemctl enable fake_app.service 
+		- $ sudo systemctl start fake_app.service 
+	+ $ tail -f /var/log/fake_app/fake_app.log 
+	+ Lab complete: 
+		- $ sudo systemctl stop fake_app.service 
+		- $ systemctl status fake_app.service 
+		- $ exit 
+
+
+* Answers: 
+	1.- | 
+		+ The first process that runs when Linux boots. 
+		+ It: 
+			- Boots the system: mounts fss, sets hostname, starts netw. 
+			- Manages services & service dependencies. 
+			- Manages logs. 
+			- Manages devices, sockets, timers. 
+		+ Before systemd: 
+			- SysV init. 			# "System five". 
+			- Shell scripts in /etc/init.d. 
+			- Slow & dumb. 
+
+	2.- | 
+		+ Service. 
+		+ Socket. 
+		+ Target. 
+		+ Device. 
+		+ Mount. 
+		+ Automount. 
+		+ Timer. 
+		+ Swap. 
+		+ Path. 
+		+ Slice. 
+		+ Scope. 
+
+	3.- | 
+		+ Restart=always: 
+			- PROD critical. 
+			- Service MUST stay running: web server, API, DB. 
+			- Any exit is unexpected (crash or clean stop). 
+		+ Restart=on-failure: 
+			- Most app services. 
+			- Service should restart if it crashes (exit code != 0). 
+		+ Restart=no: 
+			- One-shot tasks like DB migration, backup script. 
+			- Meant to exit when done. 
+
+	4.- | 
+		+ Unit: what is being managed by systemd, like a "target" (group of units). 
+		+ Loaded: systemd has read the service config file. Enabled: will start at boot. 
+		+ Active: what is unit doing: running, inactive, failed. 
+		+ Sub: more detail: running, exited, waiting, failed. 
+
+	5.- | 
+		+ On Docker there is no systemd. 
+		+ Because: 
+			- PID 1: 
+				' Real Linux system: systemd. 
+				' Docker: your process or entrypoint. 
+			- Container philosophy: 
+				' One process per container. 
+				' No need for a service manager. 
+		+ Dockerfile: 
+			FROM python:3.12-slim 
+			COPY fake_app.py /opt/fake_app/
+			CMD ["python", "/opt/fake_app/fake_app.py"]
+		+ Execute: 
+			- $ docker run --restart=on-failure fake_app 

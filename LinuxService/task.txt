@@ -1,0 +1,39 @@
+* Task: Setup a Python script as a service on Linux. 
+
+* Theory questions: 
+	1.- What is "systemd"? 
+	2.- What "unit types" exist? 
+	3.- When would you set "restart" option to: <always>, <no>, <on-failure>? 
+	4.- What are "unit", "load", "active", "sub"? 
+	5.- What would be different on Docker? 
+
+* Setup: 
+	1.- Download Ubuntu Server ISO (24.04). 
+	2.- Download & install VirtualBox. 
+	3.- Start VirtualBox. 
+	4.- Create a new VM: 
+		+ Name: UbuntuServer. 
+		+ ISO image: select the downloaded .iso. 
+		+ OS: Linux. 
+		+ Create a new virtual hard disk: 5 GB. 
+	5.- Configure networking: 
+		+ Settings > Network > Adapter 2: Bridged. 
+	6.- Start. 
+	7.- Minimal, admin, server, user, qwerty, select 5GB disk, install OpenSSH, skip SSH key import. 
+	8.- Reboot now. Remove ISO. 
+	9.- $ ip a | grep inet 
+	10.- Open Git Bash. 
+	11.- $ cd LabEnv && scp fake_app.py user@192.168.100.21:~ 
+	12.- $ ssh user@192.168.100.21 
+
+
+
+* Cleanup: 
+	# Note: these resources are also used for: 
+	#	- Firewalls challenge. 
+	#	- Disk intermediate challenge. 
+	#	- Disk advanced challenge. 
+	+ VM: 
+		- Delete Ubuntu ISO. 
+		- Terminate VM, delete all files. 
+		- Uninstall Virtual Box. 
