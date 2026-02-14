@@ -1,0 +1,60 @@
+=============================== Networking ======================================
+
+* What is DNS? 
+  Ans: 
+	// The phonebook of the Internet. 
+	+ Computers don't go by name like us, they go by number. 
+	+ Devices talk & identify with each other over a network using IP addresses. 
+	+ Domain Name System was developed to bridge the communication gap. 
+	+ Resolves domain names to IP addresses (numbers). 
+
+* How does DNS work? 
+  Ans: 
+	// Browser > local cache > Resolver (ISP) > Root > TLD > Auth Name Server > IP. 
+	1.- I type in example.com in my web browser. 
+	2.- If my browser / OS can't find the IP address in local cache, 
+	3.- Request is sent to Resolver Server, my ISP (Internet Service Provider). 
+	4.- If Resolver doesn't have example.com cached, request is sent to Root Server. 
+		# Root servers sit at the top of a DNS hierarchy. 
+		# ~Dozen sets of these placed around the world, operated by different organizations. 
+	5.- Root server directs Resolver to the TLD (Top-Level Domain) for '.com'. 
+		# Resolver asks TLD for example.com. 
+	6.- TLD directs Resolver to Authoritative Name Server. 
+		# Resolver asks Name Server for example.com. 
+		# Name servers are responsible for knowing everything about the domain. 
+	7.- Finally responds with IP address. 
+
+
+
+* What happens after you type in example.com into your web browser? Context: HTTP. 
+   Ans: 
+	// URL (proto) > local cache > DNS lookup > TCP > HTTP req > response > render. 
+	1.- I type in a URL (Universal Resource Locator): http://example.com/product/phone 
+		- http:: Scheme. Tells browser to connect to server using HTTP protocol. 
+		- example.com: Domain. 
+		- product: Path. 
+		- phone: Resource. 
+	+ DNS (translates domain names to IP addresses) lookup: 
+		2.- Browser looks in its cache, if miss, asks OS for it. 
+		3.- Sends query to DNS Resolver (recursive lookup). 
+	4.- Browser establishes TCP connection with web server through a 3-way handshake. 
+	5.- Browser sends HTTP request over TCP connection. 
+	6.- Server sends back response. 
+	7.- Browser renders the content. 
+
+==============================================================================
+
+
+
+
+
+
+=============================== Git ============================================
+
+* What does rebase do? 
+   Ans: 
+	+ Moves commits to a new base commit by replaying them, creating a linear history with new hashes. 
+		- Should only be used on local or private branches. 
+		- Golden rule: never rebase commits that have already been pushed to a shared branch. 
+
+==============================================================================

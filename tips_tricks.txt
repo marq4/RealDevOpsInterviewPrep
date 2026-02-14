@@ -60,13 +60,3 @@
 				; $ mvn clean package 
 			' If test(s) fail and you only want to build the JAR artifact: 
 				; $ mvn clean package --define skipTests 
-
-
-* Mini interview cheat sheet for most common questions: 
-	+ Git: 
-		- What does rebase do ?
-			Ans: 
-			' Moves commits to a new base commit by replaying them, 
-			  creating a linear history with new hashes. 
-			' It should only be used on local or private branches. 
-			' Golden rule: never rebase commits that have already been pushed to a shared branch. 
