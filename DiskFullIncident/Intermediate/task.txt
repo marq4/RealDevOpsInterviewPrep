@@ -1,0 +1,51 @@
+* Situation: Linux "box" (VM) disk space 100% full. 
+* Task: Resolve situation. 
+
+* Theory questions: 
+	1.- When would you NOT delete a file under a temporary folder? 
+	2.- What is /usr? 
+	3.- How do we check how much disk space is being used by the system journal? 
+	4.- See bottom 10 lines of the system journal. 
+	5.- How would you keep only the latest 10 lines of a log file? 
+	6.- Linux kernel: 
+		+ What is it? 
+		+ Get installed kernels. 
+		+ Show all kernel files. 
+		+ Show currently running kernel. 
+		+ Safe removal of old kernels. 
+	7.- Check if someone or a process is using a file. 
+
+
+* Setup: 
+	1.- Download Ubuntu Server ISO (24.04). 
+	2.- Download & install VirtualBox. 
+	3.- Start VirtualBox. 
+	4.- Create a new VM (or reuse from basic lab): 
+		+ Name: UbuntuServer. 
+		+ ISO image: select the downloaded .iso. 
+		+ OS: Linux. 
+		+ Create a new virtual hard disk: 5 GB. 
+	5.- Configure networking: 
+		+ Settings > Network > Adapter 2: Bridged. 
+	6.- Start. 
+	7.- Minimal, admin, server, user, qwerty, select 5GB disk, install OpenSSH, skip SSH key import. 
+	8.- Reboot now. Remove ISO. 
+	9.- $ ip a | grep inet 
+	10.- Open Git Bash. 
+	11.- $ cd LabEnv && scp fill_disk2.sh user@192.168.100.21:~ 
+	12.- $ ssh user@192.168.100.21 
+	13.- $ sudo ./fill_disk2.sh 
+	14.- $ df -h 
+		# 98% / 
+	15.- Fill in the remaining free space: 
+		+ $ sudo dd if=/dev/zero of=/fillfile bs=1M 2>/dev/null 
+		+ $ df -h 
+			# 100% / 
+
+* Cleanup: 
+	# Note: these resources are used for: 
+	#	- Disk advanced challenge. 
+	# 	- Service challenge. 
+	#	- Firewalls challenge. 
+	+ Delete ISO. 
+	+ Uninstall VirtualBox. 

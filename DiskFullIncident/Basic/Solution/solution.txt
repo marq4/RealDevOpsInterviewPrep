@@ -1,0 +1,143 @@
+* Tips: 
+	+ $ apropos usage 
+	+ $ curl "https://cheat.sh/du" 
+
+
+
+
+
+
+* Execution: 
+	$> 
+	+ df -h | tee currentdiskusage.txt 
+		# Used: 15G 
+	+ apt clean 
+	+ ls -A /tmp/ 
+	+ docker --version
+		# bash: docker: command not found 
+	+ cd / && du -xh / | sort -rhk 1 | head -10 ; cd ~ 
+		# /var/log/myapp, /backup, /var/lib/docker/overlay2, /var/crash 
+	+ find / -type f -size +1G 2>/dev/null 
+		# /sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/VMBUS:00/... 
+	+ du --summarize -h /sys 
+		# 0 /sys 
+	+ cd /var/log/myapp/ && ls -A 
+	+ cp app.log /tmp/ && ls -l /tmp/app.log 
+	+ rm -rf * 
+	+ mv /tmp/app.log . 
+	+ cd /var/cache/ 
+	+ rm -rf * 
+	+ cd /backup/ 
+	+ rm db-backup-2024-01-01.sql.gz 		# Note: ls -lht(r) may not show the latest one clearly. 
+	+ cd /var/lib/docker/overlay2/ && ls -Alh 
+	# Safe to delete as Docker-in-Docker is not running: 
+	+ rm a7f3c8e9d2b1f4a6c8e7d9b2f1a4c6e8-init 
+	+ cd /var/crash && ls -Alh 
+	+ rm core.02102026 
+	+ df -h 
+		# Used: 14G 
+
+
+* Answers: 
+	1.- | 
+		+ Rotated logs: /var/log/*.log.* 
+		+ Old compressed logs: /var/log/*/*.gz 
+		+ Old systemd journal logs: /var/log/journal/* 
+			- $ journalctl --vacuum-time=7d 
+			- $ journalctl --vacuum-size=500M 
+		+ Anything under /var/cache/ 
+			- $ apt clean 
+		+ /tmp/. 
+		+ Old kernels: 
+			- $ apt-get autoremove --purge 
+			- $ dpkg --list | grep linux-image 
+			- $ apt-get remove linux-image-<OLD> 
+			# Keep at least current + previous for rollback. 
+		+ Docker stuff: 
+			- $ docker system prune -a 
+			- $ docker volume prune 
+			- $ docker container prune 
+			- $ docker image prune -a 
+		+ Core dumps: /var/crash/* 
+		+ Old backups: 
+			- /backup/* 
+			- /bkp/* 
+			- /var/backup/* 
+			- ~/.backup/* 
+			- Etc... 
+		+ Build artifacts: 
+			- /var/lib/jenkins/workspace/*/target/* 
+			- /var/lib/jenkins/workspace/*/node_modules/* 
+			- ~/.m2/repository/* 
+			- ~/.gradle/caches/* 
+		+ Always check if files are in use with `lsof` before deleting. 
+		+ To be safe: 
+			1.- Move files to /tmp/To_Delete/ 
+			2.- Monitor for issues. 
+			3.- Delete files permanently with `rm`. 
+
+	2.- $ df -h 		# "Disk-Free" --human-readable 
+
+	3.- | 
+		+ $ ncdu / 
+		+ $ du -h --summarize /* 2>/dev/null | sort -hr | head -5 	# "Disk-Usage" 
+		+ $ find . -type f -size +500M -exec ls -lh {} \; | awk '{ print $5, $6, $7, $9 }' 
+
+	4.- $ ls -lht 	# Top: latest. "LiSt Long, Human-readable sizes, Timestamp-sort. 
+
+	5.- | 
+		+ Log files: 
+			- App: 
+				' Keep .log (should be latest). 
+				' Delete rotated logs: .log.# 
+			- System (/var/log/): older than 30 days: 
+				' syslog.* 
+				' kern.log.* 
+				' auth.log.* 
+		+ Old backups (/backup/): 
+			- Keep: db-backup-latest.sql.gz 
+			- Delete db-backup-<DATE>-.sql.gz 
+		+ Core dumps: 
+			- /var/crash/core.* 
+			- /tmp/core.* 
+		+ Temporary files: 
+			- /tmp/* 
+			- /var/tmp/* 
+			- ~/.cache/* 
+		+ Package manager caches: 
+			- /var/cache/apt/archives/*.deb 
+			- $ apt clean 
+			- ~/.cache/pip/* 
+		+ Old Docker stuff: 
+			- /var/lib/docker/overlay2/<OLD_LAYER_IDs> 
+			- $ docker system prune -a 
+
+
+	6.- | 
+		+ Overlay is Docker's default storage driver (filesystem layer). 
+		+ It's how Docker efficiently stores container filesystems. 
+		+ Container fs (overlay): 
+			- TOP: container layer (RW). 
+			- Image layers (R). 
+			- Host fs. 
+		+ Overlay combines all layers into a single unified fs that the container sees. 
+
+	7.- | 
+		+ A device file from the Linux sysfs filesystem. 
+		+ VMBUS:00: Hyper-V Virtual Machine Bus. 
+			- The virtual HW interface that Win Docker Desktop uses when running containers. 
+		+ /sys contains virtual files. 
+			- Look like files but are actually kernel interfaces. 
+			- Don't consume real disk space: 
+				' $ du -sh /sys 			# --summarize 
+				# 0 
+
+	8.- Yes. 
+		+ Remember that deleting a file inside the container, also deletes it on the host, if it is on a Bind Mount! 
+		+ $ mount | grep -v "overlay\|tmpfs\|proc\|sysfs" 
+		# Bind Mount from host: 
+			# /dev/sde ... 
+		# NOT a Bind Mount (container-only): 
+			# overlay ... 
+		+ Check fs type: `df -T`: 
+			# overlay/tmpfs: container-only. 

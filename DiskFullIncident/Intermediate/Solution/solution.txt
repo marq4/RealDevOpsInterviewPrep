@@ -1,0 +1,49 @@
+* Execution: 
+	$> 
+	+ df -h 
+	+ cat > newfile.txt 
+		# qwerty 
+		# No space left on device 
+	+ curl "https://cheat.sh/du" 				# May not work. 
+	+ cd / && sudo du -xh | sort -rhk 1 | head -10 ; cd ~ 
+	+ sudo apt clean && sudo apt autoremove 
+	+ sudo find / -type f -size +500M 2>/dev/null 
+	# Remove 2 old SQL backups under /backup/ 
+	+ which docker 
+	# Remove everything under /var/lib/docker/overlay2/ 
+	# Remove all numbered logs under /var/log/myapp/ 
+	# Remove core dump under /var/crash/ 
+	# Remove /fillfile 
+	# sudo du -sh /* 2>/dev/null | sort -hr | head -10 
+	+ journalctl --disk-usage 
+	+ sudo find / -type f -size +100M -exec ls -lh {} \; 
+
+
+* Answers: 
+	1.- | 
+		+ $ sudo lsof 
+			# /tmp/app.lock 
+		+ /var/tmp/ 
+
+	2.- | 
+	 	+ Unix System Resources. 
+		+ Contains user & sysadmin commands, program libraries, manuals. 
+
+	3.- $ journalctl --disk-usage 
+
+	4.- $ journalctl --lines=10 
+
+	5.- $ tail -10 app.log > last_10_lines_app.log 
+
+	6.- | 
+		+ | 
+			- The core of the OS. 
+			- Sits between SW and HW. 
+			- Manages processes, memory, files, and devices. 
+		$> 
+		+ dpkg --list | grep linux-image 
+		+ ls -Alh /boot/vmlinuz* 
+		+ uname -r  
+		+ sudo apt autoremove --purge 
+
+	7.- $ sudo lsof /var/log/myapp/app.log 

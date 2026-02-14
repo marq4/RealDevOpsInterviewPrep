@@ -1,0 +1,28 @@
+* Situation: Linux "box" (container) taking too much disk space. 
+* Task: Find and delete unnecessary, large files. 
+* Goal: Reduce disk usage by ~1GB. 
+
+* Note: Disk will not show as >90% full or so due to limitations with WSL. 
+
+* Theory questions: 
+	+ Linux:
+		1.- What files do we usually delete to clear disk space? 
+		2.- How do we see disk usage? 
+		3.- How do we find large files? 
+		4.- How do we list files by modification date-time? 
+		5.- How do we know which files are safe to remove? 
+	+ Docker: 
+		6.- What is "overlay" filesystem? 
+		7.- What is this: 
+			/sys/devices/LNXSYSTM/LNXSYBUS:00/ACPI0004/VMBUS/dbe...cba/pci09.../resource4? 
+		8.- Is there a way to tell if a directory is shared with the host (Bind Mount) from inside the container? 
+
+* Setup: 
+	1.- Start Docker Desktop. 
+	2.- $ cd LabEnv 
+	3.- $ docker build --tag disk-lab:basic . 
+	4.- $ winpty docker run -it --rm disk-lab:basic 
+
+* Cleanup: 
+	+ $ docker image remove --force disk-lab:basic 
+	+ $ docker image list --format "{{.Repository}}:{{.Tag}}" 
