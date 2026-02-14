@@ -1,0 +1,71 @@
+* Execution: 
+	+ Make (new) terminal usable (from outside the box): 
+		- $ ssh -tt marq@192.168.100.21 'ps aux' 
+		- $ ssh -tt marq@192.168.100.21 'sudo kill 1552164' 
+		- $ ssh marq@192.168.100.21 # Investigate 
+			# marq@server:~$ 
+			# Peace...  
+	$> 
+	+ df -h 
+		# 100% / 
+	# Same steps to clear space as basic & intermediate challenges. Examples: 
+		- $ sudo du -xh /* 2>/dev/null | sort -rhk 1 | head -10 
+		- $ sudo tail -10 app.log > last_10_app.log 		# Doesn't actually work as file is all 0's with no new lines. 
+		- $ cd /tmp/ && ls -A && sudo lsof * 
+		- $ sudo find / -type f -size +50M 2>/dev/null 
+	+ $ df -h 
+		# 69% / 
+
+
+* Answers: 
+	1.- | 
+		+ If possible log in as root to avoid dealing with sudo. 	# Root access blocked by default on Ubuntu Server 20.04. 
+		+ From inside the box: 
+			- <Ctrl>+S		# Pause terminal scroll. 
+			$> 
+			- dmesg -n 1 		# Silence kernel messages (sudo). 
+			- mesg n 			# Deny write access to your term. 
+		+ From outside of the box: 
+			$> 
+			- ssh -tt marq@192.168.100.21 'ps aux' 
+			- ssh -tt marq@192.168.100.21 'sudo kill 1552164' 
+			- ssh -tt marq@192.168.100.21  'sudo pkill wall' 
+
+	2.- Boot into single-user mode:
+		+ GRUB menu > Advanced options > Recovery mode > Root shell. 
+	     or rescue mode: 
+		+ From GRUB, edit boot entry: 
+			- systemd.unit=rescue.target 
+		+ Or from running system: 
+			- $ sudo systemctl rescue 
+	     Then: 
+		+ Remount root as read-write: 
+			- $ mount -o remount,rw / 
+			- Clear disk space... 
+			- $ reboot 
+
+	3.- $ watch df -h 
+
+	4.- You get temporarily locked out (15 minutes). 
+		+ Reset manually from a fresh session: 
+			- $ sudo faillock --user marq --reset 
+
+	5.- | 
+		+ Log Rotation (logrotate): 
+			# /etc/logrotate.d/myapp: 
+			/var/log/myapp/*.log {
+				daily           	# Rotate daily 
+				rotate 7        	# Keep 7 days 
+				compress        	# gzip old logs 
+				missingok       	# Don't error if log missing 
+				notifempty      	# Don't rotate empty logs 
+				maxsize 100M    	# Rotate if exceeds 100MB 
+				postrotate
+					systemctl reload myapp 
+				endscript
+			}
+		+ Disk Monitoring + Alerts. 
+		+ Resource Limits (ulimit / systemd). 
+		+ Separate Filesystem for Logs. 
+		+ Centralised Logging: instead of writing to disk locally, ship logs to external sys. 
+		+ Core Dump Limits. 

@@ -1,0 +1,29 @@
+* Situation: 
+	+ Linux "box" (VM) disk space 100% full. 
+	+ And it's unusable because a message is printed to screen every second. 
+
+* Task: Resolve situation. 
+
+
+* Theory questions: 
+	1.- Stop messages on a "chatty" terminal. 
+	2.- What if commands can't even be typed in at all ? 
+	3.- Monitor disk usage in real time. 
+	4.- What happens if you type sudo password incorrectly many times in a row ? 
+	5.- In general, how would you prevent something like this from happening again ? 
+
+
+* Setup: 
+	1.- Follow same steps as intermediate challenge. but with: 
+		+ $ sudo bash fill_disk3.sh 
+		+ $ sudo bash /opt/myapp/runaway.sh 
+	2.- Open a separate terminal to investigate. 
+	# To pause messages just <Ctrl>+C on the first terminal. 
+
+* Cleanup: 
+	# Note: these resources are also used for: 
+	#	- Disk intermediate challenge. 
+	# 	- Service challenge. 
+	#	- Firewalls challenge. 
+	+ Delete ISO. 
+	+ Uninstall VirtualBox. 
