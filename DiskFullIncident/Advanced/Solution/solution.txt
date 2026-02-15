@@ -1,10 +1,12 @@
 * Execution: 
-	+ Make (new) terminal usable (from outside the box): 
-		- $ ssh -tt marq@192.168.100.21 'ps aux' 
-		- $ ssh -tt marq@192.168.100.21 'sudo kill 1552164' 
-		- $ ssh marq@192.168.100.21 # Investigate 
-			# marq@server:~$ 
-			# Peace...  
+	+ Make (new) terminal usable: 
+		- From outside the box
+			' $ ssh -tt user@192.168.100.21 'ps aux' 
+			' $ ssh -tt user@192.168.100.21 'sudo kill 1552164' 
+		- Connect to the box: 
+			' $ ssh user@192.168.100.21 # Investigate 
+				# user@server:~$ 
+				# Peace...  
 	$> 
 	+ df -h 
 		# 100% / 
@@ -27,9 +29,9 @@
 			- mesg n 			# Deny write access to your term. 
 		+ From outside of the box: 
 			$> 
-			- ssh -tt marq@192.168.100.21 'ps aux' 
-			- ssh -tt marq@192.168.100.21 'sudo kill 1552164' 
-			- ssh -tt marq@192.168.100.21  'sudo pkill wall' 
+			- ssh -tt user@192.168.100.21 'ps aux' 
+			- ssh -tt user@192.168.100.21 'sudo kill 1552164' 
+			- ssh -tt user@192.168.100.21  'sudo pkill wall' 
 
 	2.- Boot into single-user mode:
 		+ GRUB menu > Advanced options > Recovery mode > Root shell. 
@@ -48,7 +50,7 @@
 
 	4.- You get temporarily locked out (15 minutes). 
 		+ Reset manually from a fresh session: 
-			- $ sudo faillock --user marq --reset 
+			- $ sudo faillock --user user --reset 
 
 	5.- | 
 		+ Log Rotation (logrotate): 
