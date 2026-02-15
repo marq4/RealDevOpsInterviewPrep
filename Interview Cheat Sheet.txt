@@ -58,3 +58,37 @@
 		- Golden rule: never rebase commits that have already been pushed to a shared branch. 
 
 ==============================================================================
+
+
+
+
+
+=============================== Cloud ==========================================
+
+* What are the differences between IaaS, PaaS, and SaaS? Give examples of each. 
+   Ans: 
+	# aaS: as a Service. 
+	// Infra: rent HW. Platform: focus on dev, not servers. Software: just use it. 
+	+ SW: Gmail. 
+	+ Platform: 
+		- Provider: infra + OS + runtime+ middleware. 
+		- We: app + data. 
+		- Heroku, AWS E Beanstalk, Az App S, Oracle Autonomous Database. 
+	+ Infra: 
+		- Provider: raw compute, storage, netw. 
+		- EC2, Az VMs, OCI VM instances. 
+	// IaaS gives us the most control but ALSO the most responsibility. 
+	// PaaS allows devs to ship fast. 
+
+
+* How do we avoid unexpected cloud costs? 
+  Ans: 
+	// Tag everything, alert on budgets, delete unused resources, right-size instances. 
+	+ Cost dashboards. 
+	+ Billing alterts. 
+	+ Resource tagging: who is spending in what. 
+	+ Regularly review & downsize underutilized resources. 
+	+ CSP recommendations: AWS Compute Optimizer, Az Advisor. 		# Cloud Service Provider. 
+	+ Schedule dev/test envs to auto shut down outside business hours. 
+
+==============================================================================
