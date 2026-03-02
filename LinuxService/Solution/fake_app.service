@@ -1,0 +1,16 @@
+[Unit]
+Description=Fake Python App service
+After=network.target
+
+[Service]
+Type=simple
+User=user
+WorkingDirectory=/opt/fake_app
+ExecStart=/usr/local/bin/python /opt/my_app/fake_app.py
+Restart=on-failure
+RestartSec=5
+StandardOutput=append:/var/log/my_app/my_app.log
+StandardError=append:/var/log/my_app/my_app.log
+
+[Install]
+WantedBy=multi-user.target
